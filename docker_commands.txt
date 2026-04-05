@@ -1,0 +1,7 @@
+
+docker build -t flask .	: Builds a reusable image named "flask" from your local Dockerfile.
+docker run -p 5005:5000 flask	: Starts the app and maps your machine's port 5005 to the container's 5000.
+docker run -dp 5005:5000 flask	: Runs the container in "detached" mode (background) so it doesn't block your terminal.
+docker run -dp 5005:5000 -w /app -v "$(pwd):/app" : flask	Syncs your code folder with the container to allow for "Hot Reloading" while you code.
+docker-compose up	: Launches all services defined in your YAML file (app, database, etc.) at once.
+docker-compose down	: Stops and removes all containers, networks, and images created by up.

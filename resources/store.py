@@ -4,11 +4,13 @@ from schemas import StoreSchema
 from models import StoreModel
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from db import db
+from flask_jwt_extended import jwt_required
 
 blp = Blueprint("stores", __name__, description="Operations on stores")
 
 @blp.route("/store/<string:store_id>")
 class Store(MethodView):
+  @jwt_required()
   @blp.response(200, StoreSchema())
   def get(self, store_id):
     item = StoreModel.query.get(store_id)
@@ -25,6 +27,7 @@ class Store(MethodView):
 
 @blp.route("/store")
 class StoreNoId(MethodView):
+  @jwt_required()
   @blp.arguments(StoreSchema)
   @blp.response(200, StoreSchema)
   def post(self, store_data):
@@ -42,6 +45,7 @@ class StoreNoId(MethodView):
 
     return store
   
+  @jwt_required()
   @blp.response(200, StoreSchema(many=True))
   def get(self):
     return StoreModel.query.all()
