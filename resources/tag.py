@@ -93,7 +93,7 @@ class Tag(MethodView):
     tag = TagModel.query.get_or_404(tag_id)
 
     if not tag.items:
-      db.sessions.delete(tag)
+      db.session.delete(tag)
       db.session.commit()
       return {"message": "Tag delete."}
     abort(

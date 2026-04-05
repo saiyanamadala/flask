@@ -7,6 +7,8 @@ from models import ItemModel
 from sqlalchemy.exc import SQLAlchemyError
 from db import db
 
+from flask_jwt_extended import jwt_required, get_jwt
+
 blp = Blueprint("items", __name__, description="Operations on stores")
 
 @blp.route("/item/<string:item_id>")
@@ -17,7 +19,12 @@ class Item(MethodView):
 
     return item
 
+  @jwt_required(fresh=True)
   def delete(self, item_id):
+    jwt = get_jwt()
+    if not jwt.get("is_admin"):
+        abort(401, message="Admin privilege required.")
+
     item = ItemModel.query.get_or_404(item_id)
 
     db.session.delete(item)
